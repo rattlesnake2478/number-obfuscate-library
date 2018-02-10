@@ -2,6 +2,15 @@
 
 #include <iostream>
 
-void hello() {
-    std::cout << "Hello, World!" << std::endl;
+namespace RSnake {
+
+const std::string
+NumberObfuscate::
+generateString(const int64_t value) {
+
+    auto rootNode = std::make_shared<Node>(value);
+    rootNode->explode();
+    return rootNode->getString();
 }
+
+}// End namespace RSnake
