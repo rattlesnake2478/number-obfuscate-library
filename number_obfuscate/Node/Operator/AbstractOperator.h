@@ -5,7 +5,10 @@
 
 namespace RSnake {
 
-class OperatorInterface {
+class AbstractOperator {
+protected:
+    int64_t additional_ = 0;
+
 public:
 
     // return string representation of operator
@@ -16,6 +19,12 @@ public:
 
     // perform reverse operation
     virtual const int64_t reverse (int64_t lh, int64_t total) = 0;
+
+    const std::string getAdditionalString() const {
+        if (0 == additional_) return std::string();
+        if (0 < additional_) return std::string("+") + std::to_string(additional_);
+        if (0 > additional_) return std::string("+(") + std::to_string(additional_) + std::string(")");
+    }
 
 }; // end class TransformerInterface
 

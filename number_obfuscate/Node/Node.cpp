@@ -11,6 +11,7 @@ getString() const {
                + left_->getString()
                + operator_->getStringRepresentation()
                + right_->getString()
+               + operator_->getAdditionalString()
                + std::string(")");
     }
     if (NodeState::KNOWN == state_) {
@@ -48,10 +49,8 @@ explode(uint8_t deep) {
     std::mt19937 rng(rd());
     std::uniform_int_distribution<int64_t> uni(config_.min, config_.max);
     std::uniform_int_distribution<uint8_t> sti(0, 100);
+
     auto guess = sti(rng);
-
-    operator_ = RSnake::OperatorFactory::getRandomOperator();
-
     NodeState state = NodeState::NUMERIC;
     auto value = uni(rng);
     if (guess < 20) {
@@ -59,6 +58,7 @@ explode(uint8_t deep) {
         value = config_.knownVariableValue;
     }
 
+    operator_ = RSnake::OperatorFactory::guessOperator(value, balance_);
 
     left_ = std::make_unique<Node>(value, config_, state);
     right_ = std::make_unique<Node>(operator_->reverse(value, balance_), config_);

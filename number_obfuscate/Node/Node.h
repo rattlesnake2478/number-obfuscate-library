@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "ObfuscateConfig.h"
-#include "Operator/OperatorInterface.h"
+#include "number-obfuscate/number_obfuscate/Node/Operator/AbstractOperator.h"
 
 namespace RSnake {
 
@@ -22,7 +22,7 @@ private:
     int64_t balance_;
     std::unique_ptr<Node> left_;
     std::unique_ptr<Node> right_;
-    std::shared_ptr<OperatorInterface> operator_;
+    std::shared_ptr<AbstractOperator> operator_;
 
 public:
     Node(const int64_t balance, const ObfuscateConfig & config, NodeState state = NodeState::NUMERIC)
