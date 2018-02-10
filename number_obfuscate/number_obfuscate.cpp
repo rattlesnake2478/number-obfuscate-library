@@ -8,7 +8,7 @@ const std::string
 NumberObfuscate::
 generateString(const int64_t value) {
 
-    auto rootNode = std::make_shared<Node>(value);
+    auto rootNode = std::make_shared<Node>(value, config_);
     rootNode->explode();
     return rootNode->getString();
 }

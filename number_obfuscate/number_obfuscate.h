@@ -8,7 +8,11 @@
 namespace RSnake {
 
 class NumberObfuscate {
+private:
+    ObfuscateConfig config_;
 public:
+    NumberObfuscate() {};
+    explicit NumberObfuscate(const ObfuscateConfig & config): config_(config) {};
     const std::string generateString (int64_t value);
 };
 
