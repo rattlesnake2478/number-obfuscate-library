@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.9)
 project(number_obfuscate)
+enable_testing ()
 
 # Set variables
 include(${CMAKE_SOURCE_DIR}/cmake/SetEnv.cmake)
@@ -12,3 +13,6 @@ add_subdirectory(examples)
 
 # Install targets
 include(${CMAKE_SOURCE_DIR}/cmake/InstallConfig.cmake)
+
+# Testing
+add_subdirectory(tests)

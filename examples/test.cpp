@@ -1,9 +1,28 @@
 #include <iostream>
 
+#include <matheval.h>
+#include <number_obfuscate.h>
+
 int main(int argc, char *argv[]) {
-    int64_t i = 5;
-    int64_t j = 42;
-    int64_t result = (((((j*63+j*(-39))-(j*12-j*(-12)))+((85*0+(-61))-((-18)*1*1+(-17))))-(((i*4*4+4)+((-1)+(-73)))-((i-(-96))*(89+(-89))+36)))*((((i-32)+(26-47))*((j*110+j*(-110))+((-52)-(-54)))+(-13))-(((j*84+j*(-162))*(j*105*j*0))*((91-172)+((-4)*(-20)+1))+(-109)))+64);
-    std::cout << "Result: " << std::to_string(result) << std::endl;
+    auto config = RSnake::ObfuscateConfig(std::string("x"), std::string("y"));
+    auto numberObfuscate = new RSnake::NumberObfuscate(config);
+    const int64_t required = 64;
+
+    uint32_t cnt = 0;
+    uint32_t numTests = 10;
+
+    for (uint32_t i = 0; i < numTests; i++) {
+        auto expression = numberObfuscate->generateString(required);
+        auto f = evaluator_create ((char *)expression.c_str());
+
+        auto result = (int64_t)evaluator_evaluate_x_y(f, config.knownVariableValue, 89);
+        if (result != required) {
+            ++cnt;
+            std::cout << "Result: " << result << std::endl;
+            std::cout << expression << std::endl;
+        }
+    }
+    std::cout << "Total: " << cnt << " of " <<  numTests << std::endl;
+
     return 0;
 }

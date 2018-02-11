@@ -6,6 +6,8 @@ This library obfuscates integer numbers with using predefined value and unknown 
   - make
   - cmake > 3.9
   - gcc > 7.2.0
+  - libmatheval
+  - libboost
   
 ## Installation
   - git clone https://github.com/rattlesnake2478/number-obfuscate-library.git

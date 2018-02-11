@@ -7,7 +7,7 @@ RSnake::DecoratorFactory::
 getRandomDecorator(const  int64_t value, const RSnake::ObfuscateConfig &config) {
     static const std::vector<std::shared_ptr<AbstractDecorator>> decorators = {
         std::shared_ptr<AbstractDecorator>(new PowerDecorator(config)),
-        std::shared_ptr<AbstractDecorator>(new LogDecorator(config)),
+//        std::shared_ptr<AbstractDecorator>(new LogDecorator(config)), // unsupported vy evaluator
         std::shared_ptr<AbstractDecorator>(new EmptyDecorator(config))
     };
 
