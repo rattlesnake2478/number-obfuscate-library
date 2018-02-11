@@ -12,7 +12,7 @@ const std::string
 RSnake::EmptyDecorator::
 decorateValue (const int64_t value) const {
     if (value == config_.knownVariableValue) {
-        return config_.unknownVariableName;
+        return config_.knownVariableName;
     }
     return std::to_string(value); // no decoration
 };
