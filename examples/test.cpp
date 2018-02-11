@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
             std::cout << expression << std::endl;
         }
     }
-    std::cout << "Total: " << cnt << " of " <<  numTests << std::endl;
+    std::cout << "Total: " << cnt << " of " <<  numTests << " errors" << std::endl;
 
     return 0;
 }

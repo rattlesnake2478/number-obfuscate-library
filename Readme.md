@@ -11,8 +11,9 @@ This library obfuscates integer numbers with using predefined value and unknown 
   
 ## Installation
   - git clone https://github.com/rattlesnake2478/number-obfuscate-library.git
-  - cd number-obfuscate-library && cmake .. && make
-  - make install (if needed)
+  - cd number-obfuscate-library/build && cmake .. && make
+  - make test
+  - make install (optional)
   
 ## Using
 By default library is built as shared object. Just include library header and link library to the executable.
