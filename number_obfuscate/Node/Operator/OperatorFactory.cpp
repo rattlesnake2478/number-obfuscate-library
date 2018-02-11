@@ -22,9 +22,10 @@ getRandomOperator() {
 const std::shared_ptr<RSnake::AbstractOperator>
 RSnake::OperatorFactory::
 guessOperator(const int64_t lh, const int64_t total) {
-    if (total && abs(lh) > abs(total)) {
+    // TODO: investigate SIGFPE errors
+    /*if (total && abs(lh) > abs(total)) {
         return std::shared_ptr<AbstractOperator>(new DivOperator());
-    }
+    }*/
 
     return getRandomOperator();
 }

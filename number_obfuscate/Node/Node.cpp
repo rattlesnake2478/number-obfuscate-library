@@ -2,6 +2,7 @@
 
 #include "Node.h"
 #include "Operator/OperatorFactory.h"
+#include "Decorator/DecoratorFactory.h"
 
 const std::string
 RSnake::Node::
@@ -21,10 +22,11 @@ getString() const {
     if (NodeState::UNKNOWN == state_) {
         prefix = config_.unknownVariableName + std::string("*");
     }
+    auto decorator = DecoratorFactory::getRandomDecorator(balance_, config_);
     if (balance_ >= 0 ) {
-        return prefix + std::to_string(balance_);
+        return prefix + decorator->decorateValue(balance_);
     } else {
-        return prefix + std::string("(") + std::to_string(balance_) + std::string(")");
+        return prefix + std::string("(") + decorator->decorateValue(balance_) + std::string(")");
     }
 }
 

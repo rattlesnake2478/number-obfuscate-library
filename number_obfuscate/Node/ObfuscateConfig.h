@@ -6,10 +6,10 @@ namespace RSnake {
 struct ObfuscateConfig {
     std::string knownVariableName = "i";
     std::string unknownVariableName = "j";
-    int64_t knownVariableValue = 77;
+    int64_t knownVariableValue = 5;
     uint8_t deep = 5;
-    const int64_t min = INT16_MIN;
-    const int64_t max = INT16_MAX;
+    const int64_t min = INT8_MIN;
+    const int64_t max = INT8_MAX;
 
     ObfuscateConfig() {};
     explicit ObfuscateConfig(const uint8_t deepVal): deep(deepVal) {}
