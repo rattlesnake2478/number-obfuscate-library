@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "ObfuscateConfig.h"
-#include "number-obfuscate/number_obfuscate/Node/Operator/AbstractOperator.h"
+#include "Operator/AbstractOperator.h"
 
 namespace RSnake {
 
@@ -16,6 +16,9 @@ enum NodeState {
 
 class Node {
 
+    static const uint8_t KNOWN_PROBABILITY = 20; //percent
+    static const uint8_t UNKNOWN_PROBABILITY = 20; //percent
+
 private:
     NodeState state_;
     ObfuscateConfig config_;
@@ -24,6 +27,8 @@ private:
     std::unique_ptr<Node> right_;
     std::shared_ptr<AbstractOperator> operator_;
 
+    const std::pair<NodeState, NodeState> guessLeftNodeAndGetStates(int64_t &leftValue, NodeState baseState) const;
+
 public:
     Node(const int64_t balance, const ObfuscateConfig & config, NodeState state = NodeState::NUMERIC)
             : balance_(balance), config_(config), state_(state) {};
@@ -31,6 +36,7 @@ public:
     const std::string getString() const;
     void explode() { explode(config_.deep); };
     void explode(uint8_t deep);
+
 
 }; //end class Node
 

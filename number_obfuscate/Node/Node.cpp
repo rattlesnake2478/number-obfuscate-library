@@ -17,13 +17,14 @@ getString() const {
     if (NodeState::KNOWN == state_) {
         return config_.knownVariableName;
     }
+    auto prefix = std::string();
     if (NodeState::UNKNOWN == state_) {
-        return config_.unknownVariableName;
+        prefix = config_.unknownVariableName + std::string("*");
     }
     if (balance_ >= 0 ) {
-        return std::to_string(balance_);
+        return prefix + std::to_string(balance_);
     } else {
-        return std::string("(") + std::to_string(balance_) + std::string(")");
+        return prefix + std::string("(") + std::to_string(balance_) + std::string(")");
     }
 }
 
@@ -35,8 +36,8 @@ explode(uint8_t deep) {
         return;
     }
 
-    if (NodeState::NUMERIC != state_) {
-        // we cannot explode non-numeric node
+    if (NodeState::KNOWN == state_) {
+        // we cannot explode known state node
         return;
     }
     if (operator_) {
@@ -44,24 +45,46 @@ explode(uint8_t deep) {
         return;
     }
 
-    // TODO: Move generator to static member
+    int64_t leftValue = 0;
+    auto states = guessLeftNodeAndGetStates(leftValue, state_);
+    operator_ = RSnake::OperatorFactory::guessOperator(leftValue, balance_);
+    auto rightValue = operator_->reverse(leftValue, balance_);
+
+    left_ = std::make_unique<Node>(leftValue, config_, states.first);
+    right_ = std::make_unique<Node>(rightValue, config_, states.second);
+    left_->explode(--deep);
+    right_->explode(deep);
+}
+
+const std::pair<RSnake::NodeState, RSnake::NodeState>
+RSnake::Node::
+guessLeftNodeAndGetStates(int64_t &leftValue, NodeState baseState) const {
+
+    auto leftState = NodeState::NUMERIC;
+    auto rightState = NodeState::NUMERIC;
+    if (NodeState::UNKNOWN == baseState) {
+        leftState = NodeState::UNKNOWN;
+        rightState = NodeState::UNKNOWN;
+    }
+
     std::random_device rd;
     std::mt19937 rng(rd());
     std::uniform_int_distribution<int64_t> uni(config_.min, config_.max);
     std::uniform_int_distribution<uint8_t> sti(0, 100);
 
+    leftValue = uni(rng);
+
     auto guess = sti(rng);
-    NodeState state = NodeState::NUMERIC;
-    auto value = uni(rng);
-    if (guess < 20) {
-        state = NodeState::KNOWN;
-        value = config_.knownVariableValue;
+
+    if (NodeState::NUMERIC == baseState) {
+        if(guess < KNOWN_PROBABILITY) {
+            leftState = NodeState::KNOWN;
+            leftValue = config_.knownVariableValue;
+        } else if (guess > KNOWN_PROBABILITY && guess < KNOWN_PROBABILITY + UNKNOWN_PROBABILITY) {
+            leftState = NodeState::UNKNOWN;
+            leftValue = 0;
+        }
     }
 
-    operator_ = RSnake::OperatorFactory::guessOperator(value, balance_);
-
-    left_ = std::make_unique<Node>(value, config_, state);
-    right_ = std::make_unique<Node>(operator_->reverse(value, balance_), config_);
-    left_->explode(--deep);
-    right_->explode(deep);
-}
+    return std::make_pair(leftState, rightState);
+};
